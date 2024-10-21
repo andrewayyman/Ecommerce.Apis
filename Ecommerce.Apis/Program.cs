@@ -7,15 +7,16 @@ namespace Ecommerce.Apis
     {
         public static async Task Main( string[] args )
         {
+
             var builder = WebApplication.CreateBuilder(args);
 
             #region Configure Services
             // Add services to the container.
 
             // Db Connection 
-            builder.Services.AddDbContext<StoreContext>( options =>
+            builder.Services.AddDbContext<StoreContext>(options =>
             {
-                options.UseSqlServer( builder.Configuration.GetConnectionString("DefaultConnection") );
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
 
@@ -23,14 +24,14 @@ namespace Ecommerce.Apis
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(); 
+            builder.Services.AddSwaggerGen();
             #endregion
 
             var app = builder.Build();
 
             #region Configure Middlewares
 
-            #region Update Database When Run App
+            #region Update Database When App Runs
             // Ask Explicitly for creating object from storecontext
             using var scope = app.Services.CreateScope(); // AddScoped
             var services = scope.ServiceProvider;
@@ -40,14 +41,15 @@ namespace Ecommerce.Apis
 
             try
             {
-                await _dbContext.Database.MigrateAsync();
+                await _dbContext.Database.MigrateAsync();      // Update Database
+                await StoreContextSeed.SeedAsync(_dbContext);  // Seed Data
             }
             catch ( Exception ex )
             {
                 var logger = loggerFactory.CreateLogger<Program>();
                 logger.LogError(ex, "Error occurred during Migration");
 
-            } 
+            }
             #endregion
 
 
@@ -61,7 +63,7 @@ namespace Ecommerce.Apis
 
             app.UseHttpsRedirection();
             app.UseAuthorization();
-            app.MapControllers(); 
+            app.MapControllers();
             #endregion
 
             app.Run();
