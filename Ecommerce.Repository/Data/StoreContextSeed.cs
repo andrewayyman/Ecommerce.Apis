@@ -35,10 +35,8 @@ namespace Ecommerce.Repository.Data
 
                 if ( _dbContext.ProductBrands.Count() == 0 )
                 {
-                    foreach ( var brand in brands )
-                    {
-                        _dbContext.Set<ProductBrand>().Add(brand);
-                    }
+                    _dbContext.Set<ProductBrand>().AddRange(brands);
+
                     await _dbContext.SaveChangesAsync();
                 }
             }
@@ -55,10 +53,8 @@ namespace Ecommerce.Repository.Data
 
                 if ( _dbContext.ProductCategories.Count() == 0 )
                 {
-                    foreach ( var category in categories )
-                    {
-                        _dbContext.Set<ProductCategory>().Add(category);
-                    }
+                    _dbContext.Set<ProductCategory>().AddRange(categories);
+
                     await _dbContext.SaveChangesAsync();
                 }
             }
@@ -74,10 +70,8 @@ namespace Ecommerce.Repository.Data
 
                 if ( _dbContext.Products.Count() == 0 )
                 {
-                    foreach ( var product in products )
-                    {
-                        _dbContext.Set<Product>().Add(product);
-                    }
+                    _dbContext.Set<Product>().AddRange(products);
+
                     await _dbContext.SaveChangesAsync();
                 }
             }
