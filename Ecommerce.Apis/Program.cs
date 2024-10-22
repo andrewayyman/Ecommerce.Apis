@@ -1,3 +1,6 @@
+using Ecommerce.Core.Entites;
+using Ecommerce.Core.Repository.Contract;
+using Ecommerce.Repository;
 using Ecommerce.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +22,13 @@ namespace Ecommerce.Apis
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-
+            // DI
+            ///builder.Services.AddScoped< IGenericRepository<ProductBrand>, GenericRepository<ProductBrand> >();
+            ///builder.Services.AddScoped< IGenericRepository<Product>, GenericRepository<Product> >();
+            ///builder.Services.AddScoped< IGenericRepository<ProductCategory>, GenericRepository<ProductCategory> >();
+            /// -------------- Replace the 3 ------------- // 
+             
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 
             builder.Services.AddControllers();
