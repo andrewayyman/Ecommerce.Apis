@@ -15,12 +15,13 @@ namespace Ecommerce.Repository.Data
         public async static Task SeedAsync( StoreContext _dbContext )
         {
 
+            // from json to any -->> deserialize 
+            // any to json      -->> serialize 
+
+
             #region SeedBrands
             // ---------------- Brands ---------------- // 
             var brandsData = File.ReadAllText(@"../Ecommerce.Repository\Data\DataSeeding\brands.json");
-
-            // from json to any -->> deserialize 
-            // any to json      -->> serialize 
 
             var brands = JsonSerializer.Deserialize<List<ProductBrand>>(brandsData);
 
@@ -43,7 +44,6 @@ namespace Ecommerce.Repository.Data
 
             #endregion
 
-
             #region SeedCategories
             var categoriesData = File.ReadAllText(@"../Ecommerce.Repository\Data\DataSeeding\categories.json");
             var categories = JsonSerializer.Deserialize<List<ProductCategory>>(categoriesData);
@@ -59,7 +59,6 @@ namespace Ecommerce.Repository.Data
                 }
             }
             #endregion
-
 
             #region SeedProducts
             var productsData = File.ReadAllText(@"../Ecommerce.Repository\Data\DataSeeding\products.json");

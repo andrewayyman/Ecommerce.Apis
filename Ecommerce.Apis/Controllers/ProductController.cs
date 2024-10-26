@@ -1,5 +1,6 @@
 ﻿using Ecommerce.Core.Entites;
 using Ecommerce.Core.Repository.Contract;
+using Ecommerce.Core.Specification.ProductSpecifications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,26 +19,30 @@ namespace Ecommerce.Apis.Controllers
 
 
         // BaseUrl/api/Product
-       [HttpGet]
-       public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            var products = await _productRepo.GetAllAsync();
-
-
+            var spec = new ProductWithBrandAndCategorySpecifications();
+            var products = await _productRepo.GetAllWithSpecAsync(spec);
             return Ok(products);
         }
 
+
+
+
         // BaseUrl/api/Product
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProductById(int id)
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductById( int id )
         {
-            var product = await _productRepo.GetAsync(id);
-            if (product == null)
+            var spec = new ProductWithBrandAndCategorySpecifications(id);
+
+            var product = await _productRepo.GetWithSpecAsync(spec);
+            if ( product == null )
             {
-                return NotFound(new{ Message =" Not Found" , StatusCode = 404 } ); // 404
+                return NotFound(new { Message = " Not Found", StatusCode = 404 }); // 404
             }
             return Ok(product);
-        
+
         }
 
 
