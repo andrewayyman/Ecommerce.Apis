@@ -31,7 +31,7 @@ namespace Ecommerce.Apis
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             // AutoMapper 
-            builder.Services.AddAutoMapper(M => M.AddProfile(typeof(MappingProfile) ));
+            builder.Services.AddAutoMapper( typeof(MappingProfile) );
 
 
 
@@ -74,9 +74,9 @@ namespace Ecommerce.Apis
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
             app.UseHttpsRedirection();
             app.UseAuthorization();
+            app.UseStaticFiles(); // to get files from wwwroot
             app.MapControllers();
             #endregion
 
