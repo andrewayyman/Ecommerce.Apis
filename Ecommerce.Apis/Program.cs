@@ -1,3 +1,4 @@
+using Ecommerce.Apis.Helpers;
 using Ecommerce.Core.Entites;
 using Ecommerce.Core.Repository.Contract;
 using Ecommerce.Repository;
@@ -26,9 +27,13 @@ namespace Ecommerce.Apis
             ///builder.Services.AddScoped< IGenericRepository<ProductBrand>, GenericRepository<ProductBrand> >();
             ///builder.Services.AddScoped< IGenericRepository<Product>, GenericRepository<Product> >();
             ///builder.Services.AddScoped< IGenericRepository<ProductCategory>, GenericRepository<ProductCategory> >();
-            /// -------------- Replace the 3 ------------- // 
-             
+            /// -------------- Replace the 3 ------------- //             
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            // AutoMapper 
+            builder.Services.AddAutoMapper(M => M.AddProfile(typeof(MappingProfile) ));
+
+
 
 
             builder.Services.AddControllers();
