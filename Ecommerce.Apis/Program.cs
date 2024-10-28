@@ -1,8 +1,10 @@
+using Ecommerce.Apis.Errors;
 using Ecommerce.Apis.Helpers;
 using Ecommerce.Core.Entites;
 using Ecommerce.Core.Repository.Contract;
 using Ecommerce.Repository;
 using Ecommerce.Repository.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Apis
@@ -17,11 +19,13 @@ namespace Ecommerce.Apis
             #region Configure Services
             // Add services to the container.
 
+
             // Db Connection 
             builder.Services.AddDbContext<StoreContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
 
             // DI
             ///builder.Services.AddScoped< IGenericRepository<ProductBrand>, GenericRepository<ProductBrand> >();
@@ -30,11 +34,30 @@ namespace Ecommerce.Apis
             /// -------------- Replace the 3 ------------- //             
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
+
             // AutoMapper 
-            builder.Services.AddAutoMapper( typeof(MappingProfile) );
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
+            //Handling Validation Error Response
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = ( actionContext ) =>
+                {
+                    var errors = actionContext.ModelState.Where(p => p.Value.Errors.Count() > 0)
+                                                         .SelectMany(p => p.Value.Errors)
+                                                         .Select(e => e.ErrorMessage)
+                                                         .ToList();
 
+                    var response = new ApiValidationErrorResponse()
+                    {
+                        Errors = errors
+                    };
+                    return new BadRequestObjectResult(response);
+                };
+            });
+
+                    
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -74,6 +97,8 @@ namespace Ecommerce.Apis
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            //app.UseStatusCodePagesWithRedirects("/Errors");
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.UseStaticFiles(); // to get files from wwwroot

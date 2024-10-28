@@ -6,7 +6,7 @@ namespace Ecommerce.Apis.Helpers
 {
     public class MappingProfile : Profile
     {
-        private readonly IConfiguration _configuration;
+        //private readonly IConfiguration _configuration;
 
 
         public MappingProfile( )

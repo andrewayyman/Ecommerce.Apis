@@ -11,7 +11,7 @@ namespace Ecommerce.Apis.Helpers
 
         public ProductPictureUrlResolver( IConfiguration configuration )
         {
-            _configuration = configuration;
+            _configuration = configuration; // Inject IConfiguration Service To get "ApiBaseUrl" from appsettings.json
         }
 
         public string Resolve( Product source, ProductDto destination, string destMember, ResolutionContext context )

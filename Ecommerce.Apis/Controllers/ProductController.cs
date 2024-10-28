@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Ecommerce.Apis.DTOs;
+using Ecommerce.Apis.Errors;
 using Ecommerce.Core.Entites;
 using Ecommerce.Core.Repository.Contract;
 using Ecommerce.Core.Specification.ProductSpecifications;
@@ -50,7 +51,7 @@ namespace Ecommerce.Apis.Controllers
             var product = await _productRepo.GetWithSpecAsync(spec);
             if ( product == null )
             {
-                return NotFound(new { Message = " Not Found", StatusCode = 404 }); // 404
+                return NotFound(new ApiResponse(404) ); // 404
             }
 
             var mappedProduct = _mapper.Map<Product, ProductDto> (product);
