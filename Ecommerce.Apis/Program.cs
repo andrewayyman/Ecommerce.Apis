@@ -39,7 +39,12 @@ namespace Ecommerce.Apis
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
-            //Handling Validation Error Response
+
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+            ////Handling Validation Error Response
             builder.Services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = ( actionContext ) =>
@@ -57,11 +62,6 @@ namespace Ecommerce.Apis
                 };
             });
 
-                    
-
-            builder.Services.AddControllers();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
             #endregion
 
             var app = builder.Build();

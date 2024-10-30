@@ -7,7 +7,6 @@
 
         public ApiValidationErrorResponse() : base(400) // cuz validation error is type of badrequest 
         {
-
             Errors = new List<string>();
         }
 
