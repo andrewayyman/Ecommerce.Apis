@@ -25,6 +25,8 @@ namespace Ecommerce.Apis.Controllers
 
         // BaseUrl/api/Product
         #region GetProducts
+        [ProducesResponseType(typeof(IEnumerable<ProductDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
         {
@@ -43,6 +45,9 @@ namespace Ecommerce.Apis.Controllers
 
         // BaseUrl/api/Product
         #region GetProductsById
+
+        [ProducesResponseType(typeof(ProductDto) , StatusCodes.Status200OK )]
+        [ProducesResponseType(typeof(ApiResponse) , StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetProductById( int id )
         {

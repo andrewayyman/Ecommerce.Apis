@@ -1,4 +1,5 @@
-﻿using Ecommerce.Apis.Errors;
+﻿using Ecommerce.Apis.DTOs;
+using Ecommerce.Apis.Errors;
 using Ecommerce.Repository.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,8 @@ namespace Ecommerce.Apis.Controllers
         #region NotFound
 
         // api/Buggy/notfound
+       
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet("notfound")]
         public ActionResult GetNotFoundRequest()
         {
@@ -37,6 +40,7 @@ namespace Ecommerce.Apis.Controllers
         #region ServerError
 
         // api/Buggy/servererror
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet("servererror")]
         public ActionResult GetServerError()
         {
@@ -53,6 +57,8 @@ namespace Ecommerce.Apis.Controllers
         #region BadRequest 
 
         // api/Buggy/badrequest
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+
         [HttpGet("badrequest")]
         public ActionResult GetBadRequest()
         {   
@@ -65,6 +71,8 @@ namespace Ecommerce.Apis.Controllers
 
 
         // api/Buggy/unauthorized
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status401Unauthorized)]
+
         [HttpGet("unauthorized")]
 
         public ActionResult GetUnAuthorized()
@@ -77,6 +85,8 @@ namespace Ecommerce.Apis.Controllers
         #region Validation Error
 
         // api/Buggy/GetValidationBadRequest/five
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+
         [HttpGet("getvalidationbadrequest/{id}")]
         public ActionResult GetValidationBadRequest( int id )
         {

@@ -90,7 +90,7 @@ namespace Ecommerce.Apis
             }
             #endregion
 
-            app.UseMiddleware<ExceptionMiddleware>();
+            app.UseMiddleware<ExceptionMiddleware>(); // handling server error
 
             // Configure the HTTP request pipeline.
             if ( app.Environment.IsDevelopment() )
@@ -99,7 +99,7 @@ namespace Ecommerce.Apis
                 app.UseSwaggerUI();
             }
 
-            //app.UseStatusCodePagesWithRedirects("/Errors");
+            app.UseStatusCodePagesWithReExecute("/Errors/{0}");
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.UseStaticFiles(); // to get files from wwwroot
@@ -107,11 +107,6 @@ namespace Ecommerce.Apis
             #endregion
 
             app.Run();
-
-
-
-
-
 
 
         }
