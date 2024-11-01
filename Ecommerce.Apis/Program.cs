@@ -1,4 +1,5 @@
 using Ecommerce.Apis.Errors;
+using Ecommerce.Apis.Extensions;
 using Ecommerce.Apis.Helpers;
 using Ecommerce.Apis.Middleware;
 using Ecommerce.Core.Entites;
@@ -18,8 +19,12 @@ namespace Ecommerce.Apis
             var builder = WebApplication.CreateBuilder(args);
 
             #region Configure Services
-            // Add services to the container.
 
+            // Add services to the container.
+            builder.Services.AddControllers();
+
+            // Swagger Services as Extension
+            builder.Services.AddSwaggerServices();
 
             // Db Connection 
             builder.Services.AddDbContext<StoreContext>(options =>
@@ -28,40 +33,10 @@ namespace Ecommerce.Apis
             });
 
 
-            // DI
-            ///builder.Services.AddScoped< IGenericRepository<ProductBrand>, GenericRepository<ProductBrand> >();
-            ///builder.Services.AddScoped< IGenericRepository<Product>, GenericRepository<Product> >();
-            ///builder.Services.AddScoped< IGenericRepository<ProductCategory>, GenericRepository<ProductCategory> >();
-            /// -------------- Replace the 3 ------------- //             
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            // to clean up the this file we move the code in another class as extension method and call it here
+            // Application Services as Extension
+            builder.Services.AddApplicationServices();
 
-
-            // AutoMapper 
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
-
-
-
-            builder.Services.AddControllers();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            ////Handling Validation Error Response
-            builder.Services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.InvalidModelStateResponseFactory = ( actionContext ) =>
-                {
-                    var errors = actionContext.ModelState.Where(p => p.Value.Errors.Count() > 0)
-                                                         .SelectMany(p => p.Value.Errors)
-                                                         .Select(e => e.ErrorMessage)
-                                                         .ToList();
-
-                    var response = new ApiValidationErrorResponse()
-                    {
-                        Errors = errors
-                    };
-                    return new BadRequestObjectResult(response);
-                };
-            });
 
             #endregion
 
@@ -95,15 +70,20 @@ namespace Ecommerce.Apis
             // Configure the HTTP request pipeline.
             if ( app.Environment.IsDevelopment() )
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                //app.UseSwagger();
+                //app.UseSwaggerUI();
+
+                app.UseSwaggerMiddleware(); // extension method
+
+            }   
 
             app.UseStatusCodePagesWithReExecute("/Errors/{0}");
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.UseStaticFiles(); // to get files from wwwroot
             app.MapControllers();
+
+
             #endregion
 
             app.Run();
