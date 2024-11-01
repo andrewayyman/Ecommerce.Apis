@@ -1,5 +1,6 @@
 using Ecommerce.Apis.Errors;
 using Ecommerce.Apis.Helpers;
+using Ecommerce.Apis.Middleware;
 using Ecommerce.Core.Entites;
 using Ecommerce.Core.Repository.Contract;
 using Ecommerce.Repository;
@@ -89,7 +90,7 @@ namespace Ecommerce.Apis
             }
             #endregion
 
-
+            app.UseMiddleware<ExceptionMiddleware>();
 
             // Configure the HTTP request pipeline.
             if ( app.Environment.IsDevelopment() )
@@ -106,6 +107,12 @@ namespace Ecommerce.Apis
             #endregion
 
             app.Run();
+
+
+
+
+
+
 
         }
     }

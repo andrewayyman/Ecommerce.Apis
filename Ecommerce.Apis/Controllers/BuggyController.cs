@@ -34,7 +34,6 @@ namespace Ecommerce.Apis.Controllers
         }
         #endregion
 
-
         #region ServerError
 
         // api/Buggy/servererror
