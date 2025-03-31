@@ -11,15 +11,13 @@ namespace Ecommerce.Core.Specification
 {
     public interface ISpecification<T> where T : BaseEntity
     {
-        // for Where query 
-        public Expression<Func<T,bool>> Criteria { get; set; } // Lambda Exp --->>>> p=>p.Id == id
+        // for Where query
+        public Expression<Func<T, bool>> Criteria { get; set; } // Lambda Exp --->>>> p=>p.Id == id
 
-        // For Include Query 
+        // For Include Query
+        public List<Expression<Func<T, object>>> Includes { get; set; } // Nav_Prop Path which is Exp --->>> {p=>p.Brand , p=>p.Category}
 
-        //return list of Expressions we want to include them 
-        // return Object cuz it's general and we dont know what expected return {brand , category}  
-        public List<Expression<Func<T , object>>> Includes { get; set; } // Nav_Prop Path which is Exp --->>> {p=>p.Brand , p=>p.Category}
-
-
+        //return list of Expressions we want to include them
+        // return Object cuz it's general and we dont know what expected return {brand , category}
     }
 }

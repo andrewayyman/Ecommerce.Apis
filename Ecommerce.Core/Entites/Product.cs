@@ -18,10 +18,12 @@ namespace Ecommerce.Core.Entites
 
         // nav prop
         public ProductBrand Brand { get; set; }
-        public int BrandId { get; set; } // fk 
 
-        // nav prop 
+        public int BrandId { get; set; } // fk
+
+        // nav prop
         public ProductCategory Category { get; set; }
+
         public int CategoryId { get; set; } // fk
     }
 }

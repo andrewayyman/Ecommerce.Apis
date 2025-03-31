@@ -13,21 +13,17 @@ namespace Ecommerce.Core.Specification
         public Expression<Func<T, bool>> Criteria { get; set; } // null
         public List<Expression<Func<T, object>>> Includes { get; set; } = new List<Expression<Func<T, object>>>(); // intialize here instead of ctor
 
-        public BaseSpecifications(  )
+        // in case no need where condition .. criteria = null
+        public BaseSpecifications()
         {
-            // criteria = null 
+            // criteria = null
             //Includes = new List<Expression<Func<T, object>>> (); , WE Can Intialize it in the porperty itself
-
         }
 
-        public BaseSpecifications(Expression<Func<T,bool>> criteriaExpression) // p=>p.Id == id
+        // in case we need where condition .. criteria = p=>p.Id == id
+        public BaseSpecifications( Expression<Func<T, bool>> criteriaExpression )
         {
             Criteria = criteriaExpression;
-
         }
-
-
-
     }
-
 }
