@@ -4,6 +4,8 @@ using Ecommerce.Repository.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+// just to test the bugs not for production
+
 namespace Ecommerce.Apis.Controllers
 {
     [Route("api/[controller]")]
@@ -17,11 +19,10 @@ namespace Ecommerce.Apis.Controllers
             _dbContext = dbContext;
         }
 
-
         #region NotFound
 
         // api/Buggy/notfound
-       
+
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet("notfound")]
         public ActionResult GetNotFoundRequest()
@@ -35,7 +36,8 @@ namespace Ecommerce.Apis.Controllers
 
             return Ok(product);
         }
-        #endregion
+
+        #endregion NotFound
 
         #region ServerError
 
@@ -46,55 +48,49 @@ namespace Ecommerce.Apis.Controllers
         {
             var product = _dbContext.Products.Find(100);
 
-            // any operation to throw null reference excpetion 
+            // any operation to throw null reference excpetion
             var productDto = product.ToString();
 
             return Ok(productDto);
         }
 
-        #endregion
+        #endregion ServerError
 
-        #region BadRequest 
+        #region BadRequest
 
         // api/Buggy/badrequest
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-
         [HttpGet("badrequest")]
         public ActionResult GetBadRequest()
-        {   
+        {
             return BadRequest(new ApiResponse(400));
         }
 
-        #endregion
+        #endregion BadRequest
 
         #region UnAuthorized
 
-
         // api/Buggy/unauthorized
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status401Unauthorized)]
-
         [HttpGet("unauthorized")]
-
         public ActionResult GetUnAuthorized()
         {
             return Unauthorized(new ApiResponse(401));
         }
 
-        #endregion
+        #endregion UnAuthorized
 
         #region Validation Error
 
         // api/Buggy/GetValidationBadRequest/five
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-
         [HttpGet("getvalidationbadrequest/{id}")]
         public ActionResult GetValidationBadRequest( int id )
         {
             return Ok();
         }
 
-
-        #endregion  
+        #endregion Validation Error
 
     }
 }

@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Ecommerce.Apis.Middleware
 {
-    // By convention middleware , Name must end with Middleware 
+    // By convention middleware , Name must end with Middleware
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
@@ -23,49 +23,38 @@ namespace Ecommerce.Apis.Middleware
             _env = env;
         }
 
-        public async Task InvokeAsync (HttpContext httpContext)
+        public async Task InvokeAsync( HttpContext httpContext )
         {
             try
             {
-
                 await _next.Invoke(httpContext);
-
             }
             catch ( Exception ex ) // polish the response
             {
-                // log error 
+                // log error
                 _logger.LogError(ex, ex.Message); // in Development
 
                 // Content Type
                 httpContext.Response.ContentType = "application/json";
 
                 // status code
-                httpContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError ;
+                httpContext.Response.StatusCode = ( int )HttpStatusCode.InternalServerError;
 
                 // Exception content , incase dev. return the full excpetion , any other case return excpetion with status code
                 var response = _env.IsDevelopment() ?
                     new ApiExceptionResponse(( int )HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString())
                     : new ApiExceptionResponse(( int )HttpStatusCode.InternalServerError);
 
-                // make the response camelcase 
+                // make the response camelcase
                 var options = new JsonSerializerOptions()
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 };
 
                 // Body
-                 var json = JsonSerializer.Serialize(response , options);
-                await httpContext.Response.WriteAsync( json ); // take json that's why we serialize it first
-
-
-
-
-
+                var json = JsonSerializer.Serialize(response, options);
+                await httpContext.Response.WriteAsync(json); // take json that's why we serialize it first
             }
         }
-
-
-
-
     }
 }

@@ -1,19 +1,17 @@
-﻿
-namespace Ecommerce.Apis.Errors
+﻿namespace Ecommerce.Apis.Errors
 {
     public class ApiResponse
     {
-        public int StatusCode { get; set; }
+        public int? StatusCode { get; set; }
         public string? Message { get; set; }
 
-        public ApiResponse( int statusCode , string? message = null ) 
+        public ApiResponse( int? statusCode, string? message = null )
         {
-            StatusCode = statusCode ;
-            Message = message ?? GetDefaultMessageForStatusCode(statusCode) ;
-            
+            StatusCode = statusCode;
+            Message = message ?? GetDefaultMessageForStatusCode(statusCode);
         }
 
-        private string? GetDefaultMessageForStatusCode(int statuscode)
+        private string? GetDefaultMessageForStatusCode( int? statuscode )
         {
             return statuscode switch
             {
@@ -23,9 +21,6 @@ namespace Ecommerce.Apis.Errors
                 500 => "Server Error, et3aml m3 el backend",
                 _ => null
             };
-
-
-            
         }
     }
 }

@@ -15,7 +15,6 @@ namespace Ecommerce.Apis
     {
         public static async Task Main( string[] args )
         {
-
             var builder = WebApplication.CreateBuilder(args);
 
             #region Configure Services
@@ -26,25 +25,24 @@ namespace Ecommerce.Apis
             // Swagger Services as Extension
             builder.Services.AddSwaggerServices();
 
-            // Db Connection 
+            // Db Connection
             builder.Services.AddDbContext<StoreContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-
+            // Now AddApplicationServices include all services as Extension Method
             // to clean up the this file we move the code in another class as extension method and call it here
-            // Application Services as Extension
             builder.Services.AddApplicationServices();
 
-
-            #endregion
+            #endregion Configure Services
 
             var app = builder.Build();
 
             #region Configure Middlewares
 
             #region Update Database When App Runs
+
             // Ask Explicitly for creating object from storecontext
             using var scope = app.Services.CreateScope(); // AddScoped
             var services = scope.ServiceProvider;
@@ -61,34 +59,27 @@ namespace Ecommerce.Apis
             {
                 var logger = loggerFactory.CreateLogger<Program>();
                 logger.LogError(ex, "Error occurred during Migration");
-
             }
-            #endregion
 
-            app.UseMiddleware<ExceptionMiddleware>(); // handling server error
+            #endregion Update Database When App Runs
+
+            app.UseMiddleware<ExceptionMiddleware>(); // Custome Middleware for handling server error
 
             // Configure the HTTP request pipeline.
             if ( app.Environment.IsDevelopment() )
             {
-                //app.UseSwagger();
-                //app.UseSwaggerUI();
+                app.UseSwaggerMiddleware();               // extension method in ApplicationServicesExtension.cs
+            }
 
-                app.UseSwaggerMiddleware(); // extension method
-
-            }   
-
-            app.UseStatusCodePagesWithReExecute("/Errors/{0}");
+            app.UseStatusCodePagesWithReExecute("/Errors/{0}"); // redirect to error page if status code is not 200
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.UseStaticFiles(); // to get files from wwwroot
             app.MapControllers();
 
-
-            #endregion
+            #endregion Configure Middlewares
 
             app.Run();
-
-
         }
     }
 }

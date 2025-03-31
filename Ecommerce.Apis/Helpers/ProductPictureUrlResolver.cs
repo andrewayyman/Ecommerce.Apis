@@ -5,6 +5,8 @@ using Ecommerce.Core.Entites;
 
 namespace Ecommerce.Apis.Helpers
 {
+    // Why implementsIValueResolver ? :
+    // cuz in the mapping profile mapfrom takes only object of type IValueResolver
     public class ProductPictureUrlResolver : IValueResolver<Product, ProductDto, string>
     {
         private readonly IConfiguration _configuration;
@@ -16,14 +18,11 @@ namespace Ecommerce.Apis.Helpers
 
         public string Resolve( Product source, ProductDto destination, string destMember, ResolutionContext context )
         {
-            if( ! string.IsNullOrEmpty(source.PictureUrl))
+            if ( !string.IsNullOrEmpty(source.PictureUrl) )
             {
                 return $"{_configuration["ApiBaseUrl"]}/{source.PictureUrl}";
             }
             return String.Empty;
-            
         }
-
-
     }
 }

@@ -8,21 +8,21 @@ namespace Ecommerce.Apis.Extensions
 {
     public static class ApplicationServicesExtension
     {
-
         public static IServiceCollection AddApplicationServices( this IServiceCollection services )
         {
             /// DI
             ///builder.Services.AddScoped< IGenericRepository<ProductBrand>, GenericRepository<ProductBrand> >();
             ///builder.Services.AddScoped< IGenericRepository<Product>, GenericRepository<Product> >();
             ///builder.Services.AddScoped< IGenericRepository<ProductCategory>, GenericRepository<ProductCategory> >();
-            /// -------------- Replace the 3 ------------- //             
+            /// -------------- Replace the 3 ------------- //
+
             // inject generic repo
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-            // AutoMapper 
+            // AutoMapper
             services.AddAutoMapper(typeof(MappingProfile));
 
-            ////Handling Validation Error Response
+            // Handling Validation Error Response
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = ( actionContext ) =>
@@ -41,11 +41,6 @@ namespace Ecommerce.Apis.Extensions
             });
 
             return services;
-
-
-
-
-
         }
 
         public static WebApplication UseSwaggerMiddleware( this WebApplication app )
@@ -57,6 +52,5 @@ namespace Ecommerce.Apis.Extensions
 
             return app;
         }
-
     }
 }
