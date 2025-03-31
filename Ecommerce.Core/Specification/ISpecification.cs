@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +18,10 @@ namespace Ecommerce.Core.Specification
         // For Include Query
         public List<Expression<Func<T, object>>> Includes { get; set; } // Nav_Prop Path which is Exp --->>> {p=>p.Brand , p=>p.Category}
 
-        //return list of Expressions we want to include them
-        // return Object cuz it's general and we dont know what expected return {brand , category}
+        // For OrderBy Query
+        public Expression<Func<T, object>> OrderBy { get; set; }
+
+        // For OrderByDescending Query
+        public Expression<Func<T, object>> OrderByDescending { get; set; }
     }
 }

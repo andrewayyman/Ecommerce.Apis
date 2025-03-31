@@ -37,9 +37,9 @@ namespace Ecommerce.Apis.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IReadOnlyList<ProductDto>), StatusCodes.Status200OK)] // improve swagger doc
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts()
+        public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts( string? Sort )
         {
-            var spec = new ProductWithBrandAndCategorySpecifications();
+            var spec = new ProductWithBrandAndCategorySpecifications(Sort);
             var products = await _productRepo.GetAllWithSpecAsync(spec);
             var mappedProducts = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(products);
             return Ok(mappedProducts);

@@ -12,18 +12,31 @@ namespace Ecommerce.Core.Specification
     {
         public Expression<Func<T, bool>> Criteria { get; set; } // null
         public List<Expression<Func<T, object>>> Includes { get; set; } = new List<Expression<Func<T, object>>>(); // intialize here instead of ctor
+        public Expression<Func<T, object>> OrderBy { get; set; }
+        public Expression<Func<T, object>> OrderByDescending { get; set; }
 
-        // in case no need where condition .. criteria = null
+        // GetAll() , in case no need where condition .. criteria = null
         public BaseSpecifications()
         {
             // criteria = null
             //Includes = new List<Expression<Func<T, object>>> (); , WE Can Intialize it in the porperty itself
         }
 
-        // in case we need where condition .. criteria = p=>p.Id == id
+        // GetByID , in case we need where condition .. criteria = p=>p.Id == id
         public BaseSpecifications( Expression<Func<T, bool>> criteriaExpression )
         {
             Criteria = criteriaExpression;
+        }
+
+        // Setter
+        public void AddOrderBy( Expression<Func<T, object>> orderByExpression )
+        {
+            OrderBy = orderByExpression;
+        }
+
+        public void AddOrderByDescending( Expression<Func<T, object>> orderByDescExpression )
+        {
+            OrderByDescending = orderByDescExpression;
         }
     }
 }
