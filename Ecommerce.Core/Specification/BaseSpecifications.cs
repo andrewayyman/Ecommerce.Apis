@@ -10,8 +10,8 @@ namespace Ecommerce.Core.Specification
 {
     public class BaseSpecifications<T> : ISpecification<T> where T : BaseEntity
     {
-        public Expression<Func<T, bool>> Criteria { get; set; } // null
-        public List<Expression<Func<T, object>>> Includes { get; set; } = new List<Expression<Func<T, object>>>(); // intialize here instead of ctor
+        public Expression<Func<T, bool>> Criteria { get; set; } // null, the expression that we will pass to the where clause
+        public List<Expression<Func<T, object>>> Includes { get; set; } = new List<Expression<Func<T, object>>>(); // intialize here instead of ctor , the expression that we will pass to the include clause
         public Expression<Func<T, object>> OrderBy { get; set; }
         public Expression<Func<T, object>> OrderByDescending { get; set; }
 
@@ -28,7 +28,7 @@ namespace Ecommerce.Core.Specification
             Criteria = criteriaExpression;
         }
 
-        // Setter
+        // Setters
         public void AddOrderBy( Expression<Func<T, object>> orderByExpression )
         {
             OrderBy = orderByExpression;

@@ -9,7 +9,11 @@ namespace Ecommerce.Core.Specification.ProductSpecifications
 {
     public class ProductWithBrandAndCategorySpecifications : BaseSpecifications<Product>
     {
-        public ProductWithBrandAndCategorySpecifications( string Sort ) : base()
+        public ProductWithBrandAndCategorySpecifications( string Sort, int? BrandId, int? CategoryId )
+            : base(P =>
+                ( !BrandId.HasValue || P.BrandId == BrandId ) &&   // to check if the BrandId has value or not
+                ( !CategoryId.HasValue || P.CategoryId == CategoryId )
+                )
         {
             Includes.Add(P => P.Brand);
             Includes.Add(P => P.Category);
