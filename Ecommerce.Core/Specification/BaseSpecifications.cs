@@ -14,6 +14,9 @@ namespace Ecommerce.Core.Specification
         public List<Expression<Func<T, object>>> Includes { get; set; } = new List<Expression<Func<T, object>>>(); // intialize here instead of ctor , the expression that we will pass to the include clause
         public Expression<Func<T, object>> OrderBy { get; set; }
         public Expression<Func<T, object>> OrderByDescending { get; set; }
+        public int Take { get; set; }
+        public int Skip { get; set; }
+        public bool IsPaginationEnabled { get; set; }
 
         // GetAll() , in case no need where condition .. criteria = null
         public BaseSpecifications()
@@ -37,6 +40,13 @@ namespace Ecommerce.Core.Specification
         public void AddOrderByDescending( Expression<Func<T, object>> orderByDescExpression )
         {
             OrderByDescending = orderByDescExpression;
+        }
+
+        public void ApplyPagination( int skip, int take )
+        {
+            IsPaginationEnabled = true;
+            Skip = skip;
+            Take = take;
         }
     }
 }

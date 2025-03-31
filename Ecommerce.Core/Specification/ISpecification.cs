@@ -23,5 +23,11 @@ namespace Ecommerce.Core.Specification
 
         // For OrderByDescending Query
         public Expression<Func<T, object>> OrderByDescending { get; set; }
+
+        // Pagination
+        public int Take { get; set; } // PageSize
+
+        public int Skip { get; set; } // PageIndex
+        public bool IsPaginationEnabled { get; set; }
     }
 }
