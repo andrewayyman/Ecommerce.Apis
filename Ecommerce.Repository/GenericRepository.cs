@@ -62,6 +62,11 @@ namespace Ecommerce.Repository
             return await ApplySpecification(spec).ToListAsync();
         }
 
+        public async Task<int> GetCountSpecAsync( ISpecification<T> spec )
+        {
+            return await ApplySpecification(spec).CountAsync();
+        }
+
         // to reduce redundant code
         private IQueryable<T> ApplySpecification( ISpecification<T> spec )
         {

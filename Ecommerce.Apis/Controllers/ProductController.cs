@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Ecommerce.Apis.DTOs;
 using Ecommerce.Apis.Errors;
+using Ecommerce.Apis.Helpers;
 using Ecommerce.Core.Entites;
 using Ecommerce.Core.Repository.Contract;
 using Ecommerce.Core.Specification.ProductSpecifications;
@@ -34,15 +35,22 @@ namespace Ecommerce.Apis.Controllers
 
         #region GetProducts
 
-        [HttpGet]
         [ProducesResponseType(typeof(IReadOnlyList<ProductDto>), StatusCodes.Status200OK)] // improve swagger doc
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts( [FromQuery] ProductSpecParams specParams )
+        [HttpGet]
+        public async Task<ActionResult<Pagination<ProductDto>>> GetProducts( [FromQuery] ProductSpecParams specParams )
         {
             var spec = new ProductWithBrandAndCategorySpecifications(specParams);
             var products = await _productRepo.GetAllWithSpecAsync(spec);
+
             var mappedProducts = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(products);
-            return Ok(mappedProducts);
+
+            var contSpec = new ProductFilterationForCountSpec(specParams);
+            var count = await _productRepo.GetCountSpecAsync(contSpec);
+
+            var dataWithPagination = new Pagination<ProductDto>(specParams.PageIndex, specParams.PageSize, mappedProducts, count);
+
+            return Ok(dataWithPagination);
         }
 
         #endregion GetProducts

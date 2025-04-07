@@ -11,7 +11,10 @@ namespace Ecommerce.Core.Specification.ProductSpecifications
     {
         public ProductWithBrandAndCategorySpecifications( ProductSpecParams specParams )
             : base(P =>
-                ( !specParams.BrandId.HasValue || P.BrandId == specParams.BrandId ) &&   // to check if the BrandId has value or not
+                ( string.IsNullOrEmpty(specParams.Search) || P.Name.ToLower().Contains(specParams.Search) )
+                &&
+                ( !specParams.BrandId.HasValue || P.BrandId == specParams.BrandId )  // to check if the BrandId has value or not
+                &&
                 ( !specParams.CategoryId.HasValue || P.CategoryId == specParams.CategoryId )
                 )
         {

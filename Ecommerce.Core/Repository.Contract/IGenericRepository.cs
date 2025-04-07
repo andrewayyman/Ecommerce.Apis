@@ -19,5 +19,7 @@ namespace Ecommerce.Core.Repository.Contract
         Task<T> GetWithSpecAsync( ISpecification<T> spec );
 
         Task<IReadOnlyList<T>> GetAllWithSpecAsync( ISpecification<T> spec );
+
+        Task<int> GetCountSpecAsync( ISpecification<T> spec );
     }
 }
