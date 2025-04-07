@@ -8,6 +8,8 @@ using Ecommerce.Repository;
 using Ecommerce.Repository.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using StackExchange.Redis;
 
 namespace Ecommerce.Apis
 {
@@ -25,10 +27,17 @@ namespace Ecommerce.Apis
             // Swagger Services as Extension
             builder.Services.AddSwaggerServices();
 
-            // Db Connection
+            // SqlDb Connection
             builder.Services.AddDbContext<StoreContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            // Redis Connection
+            builder.Services.AddSingleton<IConnectionMultiplexer>(Options =>
+            {
+                var connection = builder.Configuration.GetConnectionString("RedisConnection");
+                return ConnectionMultiplexer.Connect(connection);
             });
 
             // Now AddApplicationServices include all services as Extension Method

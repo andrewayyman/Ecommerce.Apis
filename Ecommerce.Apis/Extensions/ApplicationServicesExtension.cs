@@ -3,6 +3,7 @@ using Ecommerce.Apis.Helpers;
 using Ecommerce.Core.Repository.Contract;
 using Ecommerce.Repository;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 
 namespace Ecommerce.Apis.Extensions
 {
@@ -39,6 +40,9 @@ namespace Ecommerce.Apis.Extensions
                     return new BadRequestObjectResult(response);
                 };
             });
+
+            // allow Dependency Injection for Basket Module
+            services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
 
             return services;
         }
