@@ -25,7 +25,7 @@ namespace Ecommerce.Core.Specification.ProductSpecifications
 
         private string? search;
 
-        public string Search
+        public string? Search
         {
             get { return search; }
             set { search = value.ToLower(); }

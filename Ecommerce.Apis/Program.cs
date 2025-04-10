@@ -3,12 +3,17 @@ using Ecommerce.Apis.Extensions;
 using Ecommerce.Apis.Helpers;
 using Ecommerce.Apis.Middleware;
 using Ecommerce.Core.Entites;
+using Ecommerce.Core.Entites.Identity;
 using Ecommerce.Core.Repository.Contract;
 using Ecommerce.Repository;
 using Ecommerce.Repository.Data;
+using Ecommerce.Repository.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
 namespace Ecommerce.Apis
@@ -40,9 +45,16 @@ namespace Ecommerce.Apis
                 return ConnectionMultiplexer.Connect(connection);
             });
 
+            // Identity sqlDb Connection
+            builder.Services.AddDbContext<AppIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
+            });
+
             // Now AddApplicationServices include all services as Extension Method
             // to clean up the this file we move the code in another class as extension method and call it here
             builder.Services.AddApplicationServices();
+            builder.Services.AddIdentityServices();
 
             #endregion Configure Services
 
@@ -62,6 +74,11 @@ namespace Ecommerce.Apis
             try
             {
                 await _dbContext.Database.MigrateAsync();      // Update Database
+
+                var IdentityDbContext = services.GetRequiredService<AppIdentityDbContext>();
+                await IdentityDbContext.Database.MigrateAsync(); // Update Identity Database
+                var UserManager = services.GetRequiredService<UserManager<AppUser>>();
+                await AppIdentityDbContextSeed.SeedUserAsync(UserManager);
                 await StoreContextSeed.SeedAsync(_dbContext);  // Seed Data
             }
             catch ( Exception ex )

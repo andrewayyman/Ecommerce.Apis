@@ -7,10 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\Ecommerce.Core.Entites.Identity.AppUser.cs" Link="Ecommerce.Core.Entites.Identity.AppUser.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Services.Contract\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.14" />
     <PackageReference Include="StackExchange.Redis" Version="2.8.31" />
   </ItemGroup>
 
